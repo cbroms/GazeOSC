@@ -24,10 +24,15 @@ class ofApp : public ofBaseApp{
 		ofParameter<bool> sendFixationPos;
 
 		void addMessage(string address, float data);
-		
+		void setupOsc();
 		void sendGazeOsc();
 
-		string host;
-		int port;
-		
+		void map(ofPoint &point, float curHeight, float newHeight, float curWidth, float newWidth);
+
+		ofParameter<string> host;
+		ofParameter<string> port;
+
+		ofParameter<bool> transformCoords;
+		ofParameter<string> height;
+		ofParameter<string> width;
 };
