@@ -18,7 +18,7 @@ _The GazeOSC program on the left (on a Windows machine), sending data to a Proce
 
 Ensure the Tobii Core software has been installed and configured. Turn it on and calibrate through Tobii's interface.
 
-Download the pre-built executable, then run.
+Download the pre-built zipped executable, `gazeOSC_release_v1.0.zip` from the [releases page](https://github.com/cbroms/GazeOSC/releases/). Unzip the folder, then run the application (gazeOSC.exe).
 
 ## Configure OSC Settings and Usage
 
@@ -80,4 +80,3 @@ To edit the GazeOSC source code, you'll need Visual Studio 2017 on a Windows mac
 Now you should be able to build and run the program.
 
 ![](/docs/full_demo.gif)
-
