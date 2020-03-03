@@ -24,6 +24,7 @@ void ofApp::setup(){
 	setupOsc();
 }
 
+//--------------------------------------------------------------
 void ofApp::setupOsc() {
 	osc.setup(host, std::stoi(port));
 }
@@ -41,8 +42,8 @@ void ofApp::sendGazeOsc() {
 
 	if (sendEyePos) {
 
-		ofPoint leftData = ofPoint(-1, -1);
-		ofPoint rightData = ofPoint(-1, -1);
+		ofPoint leftData = ofPoint(-1, -1, -1);
+		ofPoint rightData = ofPoint(-1, -1, -1);
 
 		if (eye.hasLeftEye()) {
 			leftData = eye.getLeftEyeNormalized();
@@ -54,13 +55,14 @@ void ofApp::sendGazeOsc() {
 		if (transformCoords) {
 			map(leftData, ofGetScreenHeight(), std::stof(height), ofGetScreenWidth(), std::stof(width));
 			map(rightData, ofGetScreenHeight(), std::stof(height), ofGetScreenWidth(), std::stof(width));
-			
 		}
 		
 		addMessage("/eye/left/x", leftData.x);
 		addMessage("/eye/left/y", leftData.y);
+		addMessage("/eye/left/z", leftData.z);
 		addMessage("/eye/right/x", rightData.x);
 		addMessage("/eye/right/y", rightData.y);
+		addMessage("/eye/right/z", rightData.z);
 	}
 
 	if (sendGazePos) {
@@ -98,11 +100,11 @@ void ofApp::addMessage(string address, float data) {
 	bundle.addMessage(msg);
 }
 
+
+//--------------------------------------------------------------
 void ofApp::map(ofPoint &point, float curHeight, float newHeight, float curWidth, float newWidth) {
 	point.x = (point.x) / (curWidth) * (newWidth);
 	point.y = (point.y) / (curHeight) * (newHeight);
-
-//	cout << to_string(point.x) << " " << to_string(point.y) << endl;
 }
 
 
@@ -116,33 +118,40 @@ void ofApp::draw(){
 	string dest = "sending to " + osc.getHost() + ":" + std::to_string(osc.getPort());
 	ofDrawBitmapString(dest, ofPoint(10, ofGetHeight() - 10));
 
-	// Draw eye position
-	ofSetColor(0, 255, 0);
-	ofFill();
-	if (eye.hasLeftEye())
-	{
-		ofPoint p = eye.getLeftEyeNormalized();
-		ofDrawCircle(
-			p.x * ofGetWidth(),
-			p.y * ofGetHeight(),
-			(1. - p.z) * 80);
-	}
-	if (eye.hasRightEye())
-	{
-		ofPoint p = eye.getRightEyeNormalized();
-		ofDrawCircle(
-			p.x * ofGetWidth(),
-			p.y * ofGetHeight(),
-			(1. - p.z) * 80);
+	if (sendEyePos) {
+		// Draw eye position
+		ofSetColor(0, 255, 0);
+		ofFill();
+		if (eye.hasLeftEye())
+		{
+			ofPoint p = eye.getLeftEyeNormalized();
+			ofDrawCircle(
+				p.x * ofGetWidth(),
+				p.y * ofGetHeight(),
+				(1. - p.z) * 80);
+		}
+		if (eye.hasRightEye())
+		{
+			ofPoint p = eye.getRightEyeNormalized();
+			ofDrawCircle(
+				p.x * ofGetWidth(),
+				p.y * ofGetHeight(),
+				(1. - p.z) * 80);
+		}
 	}
 
-	// Draw gaze point
-	ofSetColor(255, 255, 255);
-	ofDrawCircle(eye.getGazePointData().X, eye.getGazePointData().Y, 20);
+	if (sendGazePos) {
+		// Draw gaze point
+		ofSetColor(255, 255, 255);
+		ofDrawCircle(eye.getGazePointData().X, eye.getGazePointData().Y, 20);
+	}
 	
-	// Draw fixation 
-	ofSetColor(255, 0, 0);
-	ofDrawCircle(eye.getFixationData().X, eye.getFixationData().Y, 10);
+	if (sendFixationPos) {
+		// Draw fixation 
+		ofSetColor(255, 0, 0);
+		ofDrawCircle(eye.getFixationData().X, eye.getFixationData().Y, 10);
+	}
+	
 }
 
 //--------------------------------------------------------------
@@ -154,6 +163,7 @@ void ofApp::exit() {
 	eye.close();
 }
 
+//--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 
 	if (key == 'f') {
