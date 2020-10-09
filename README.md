@@ -4,9 +4,9 @@ An OSC wrapper for the [Tobii Eye Tracker 4C](https://gaming.tobii.com/tobii-eye
 
 Stream eye position data to programs running on different machines on your network.
 
-![](/docs/demo.gif)
+_PS: you can even use this project to send gaze data [to the browser](/receivers/nodejs); check out all of the [included receivers](/receivers)_
 
-_The GazeOSC program on the left (on a Windows machine), sending data to a Processing receiver on the right (on a macOS machine)_
+![](/docs/demo.gif)
 
 ## Install
 

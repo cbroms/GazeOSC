@@ -3,3 +3,5 @@
 *.vcxproj.user
 obj/
 bin/
+
+node_modules/
